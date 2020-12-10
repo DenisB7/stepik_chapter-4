@@ -15,8 +15,6 @@ from app_vacancy.forms import RegisterUserForm, ApplicationForm, MyCompanyForm, 
 from app_vacancy.models import Company, Specialty, Vacancy, Application
 
 
-# Public starts here
-
 class MainView(View):
 
     def get(self, request):
@@ -123,10 +121,6 @@ class OneVacancyView(View):
         return render(request, 'vacancy.html', context=vac_and_form)
 
 
-# Public ends here
-
-# Resume starts here
-
 class ResumeStartView(View):
 
     @method_decorator(login_required)
@@ -187,10 +181,6 @@ class ResumeEditView(View):
         return render(request, 'resume-edit.html', {'form': form})
 
 
-# Resume ends here
-
-# Register/auth starts here
-
 class MyLoginView(LoginView):
     form_class = AuthenticationForm
     template_name = 'login.html'
@@ -210,11 +200,6 @@ class RegisterUserView(View):
 
         return render(request, 'register.html', {'form': form})
 
-
-# Register/auth ends here
-
-
-# MyCompany create/edit starts here
 
 class MyCompany(View):
 
@@ -275,11 +260,6 @@ class MyCompanyStartCreate(View):
         messages.error(request, 'ОШИБКА! Компания не создана!')
         return render(request, 'company-create.html', {'form': form})
 
-
-# MyCompany create/edit ends here
-
-
-# MyCompany Vacancies create/edit starts here
 
 class MyCompanyVacancies(View):
 
@@ -370,8 +350,6 @@ class MyCompanyOneVacancy(View):
         context = {'form': form, 'vacancy_title': vacancy.title, 'applications': applications}
         return render(request, 'vacancy-edit.html', context=context)
 
-
-# MyCompany Vacancies create/edit ends here
 
 def custom_handler404(request, exception):
     return HttpResponseNotFound('404 ошибка - ошибка на стороне '
