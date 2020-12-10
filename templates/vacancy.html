@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row mt-5">
+      <div class="col-12 col-lg-2">
+        <div class="pl-3 mb-5">
+          <p><a href="http://127.0.0.1:8000/">Назад</a></p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-8">
+        <section class="pl-3">
+          <a href="#"><img src="{{ vac.company.logo.url }}" width="130" height="80" alt=""></a>
+          <div class="d-flex align-items-baseline align-content-baseline">
+            <h1 class="h2 mt-4 font-weight-bold" >{{ vac.title }}</h1>
+            <p class="m-0 pl-3">{{ vac.salary_min }} – {{ vac.salary_max }} Р</p>
+          </div>
+          <p class="mt-2">{{ vac.specialty.title }} • {{ vac.skills }}</p>
+          <p class="text-muted mb-4">{{ vac.company.name }} ({{ vac.company.employee_count }} человек), {{ vac.company.location }} или удаленно</p>
+          <div style="line-height: 1.8;">
+            <p>{{ vac.company.description }}</p>
+            {{ vac.description|safe }}
+          </div>
+          <form method="POST" action="/vacancies/{{ vac.id }}/" class="card mt-4 mb-3" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card-body mx-3">
+              <p class="h5 mt-3 font-weight-bold">Отозваться на вакансию</p>
+              <table>{{ form.as_table }}</table>
+              <input type="submit" class="btn btn-primary mt-4 mb-2" value="Отправка заявки">
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'basecompany.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <main class="container mt-3 pb-5">
+    <div class="row mt-5">
+      <div class="col-12 col-lg-4">
+        <aside class="pt-3 pb-4 px-4 mb-5 card">
+          <h1 class="h4 pt-2 pb-2">Моя компания</h1>
+          <div class="nav flex-column nav-pills">
+            <a class="nav-link" href="/mycompany">1. Информация о&nbsp;компании</a>
+            <a class="nav-link active" href="/mycompany/vacancies">2. Вакансии</a>
+          </div>
+        </aside>
+      </div>
+      <div class="col-12 col-lg-8">
+        <div class="card">
+          <div class="card-body px-4 pb-4 tab-content">
+            <!-- Tab -->
+            <section>
+              <h2 class="h4 pt-2 pb-3">{{ vacancy_title }}</h2>
+              {% if messages %}
+              {% for message in messages %}
+              <p class="alert alert-info" role="alert">{{ message }}</p>
+              {% endfor %}
+              {% endif %}
+              {% crispy form %}
+              <!-- END Vacancy info -->
+              <!-- Applications -->
+              <h2 class="h4 pt-2 pb-3">Отклики - {{ applications|length }}</h2>
+              {% for application_info in applications %}
+              <div class="card mt-3">
+                <div class="card-body px-4" id='application'>
+                  <p class="mb-1 font-weight-bold">{{ application_info.written_username }}</p>
+                  <p class="mb-2"><a href="tel:+79002842324" class="text-dark">{{ application_info.written_phone }}</a></p>
+                  <p class="mb-1">{{ application_info.written_cover_letter }}</p>
+                </div>
+              </div>
+              {% endfor %}
+              <!-- END Applications -->
+            </section>
+            <!-- END Tab -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+{% endblock %}
