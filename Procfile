@@ -1,1 +1,1 @@
-web: gunicorn vacancies.wsgi
+web: gunicorn app_vacancy.wsgi
