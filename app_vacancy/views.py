@@ -101,7 +101,10 @@ class OneVacancyView(View):
         try:
             vacancy = Vacancy.objects.get(id=id)
             form = ApplicationForm()
-            vac_and_form = {'vac': vacancy, 'form': form}
+            vac_and_form = {
+                'vac': vacancy,
+                'form': form
+            }
             return render(request, 'vacancy.html', context=vac_and_form)
         except:
             raise Http404
@@ -323,9 +326,17 @@ class MyCompanyOneVacancy(View):
             if alien_company != vacancy.company_id:
                 return redirect('/mycompany/vacancies')
             form = MyCompanyVacanciesCreateEditForm(instance=vacancy)
-            applications = Application.objects.filter(vacancy_id=id).values('written_username', 'written_phone',
-                                                                            'written_cover_letter')
-            context = {'form': form, 'vacancy_title': vacancy.title, 'applications': applications}
+            applications = Application.objects.filter(vacancy_id=id)\
+                .values(
+                'written_username',
+                'written_phone',
+                'written_cover_letter'
+            )
+            context = {
+                'form': form,
+                'vacancy_title': vacancy.title,
+                'applications': applications
+            }
             return render(request, 'vacancy-edit.html', context=context)
         except:
             raise Http404
@@ -343,10 +354,18 @@ class MyCompanyOneVacancy(View):
 
         vacancy = Vacancy.objects.get(id=id)
         form = MyCompanyVacanciesCreateEditForm(instance=vacancy)
-        applications = Application.objects.filter(vacancy_id=id).values('written_username', 'written_phone',
-                                                                        'written_cover_letter')
+        applications = Application.objects.filter(vacancy_id=id)\
+            .values(
+            'written_username',
+            'written_phone',
+            'written_cover_letter'
+        )
         messages.error(request, 'ОШИБКА! Вакансия не обновлена!')
-        context = {'form': form, 'vacancy_title': vacancy.title, 'applications': applications}
+        context = {
+            'form': form,
+            'vacancy_title': vacancy.title,
+            'applications': applications
+        }
         return render(request, 'vacancy-edit.html', context=context)
 
 
