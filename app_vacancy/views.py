@@ -29,8 +29,7 @@ class MainView(View):
         set_of_skills = set()
         for skills_list in skills:
             skills_split = skills_list['skills'].split(', ')
-            for skill in skills_split:
-                set_of_skills.add(skill)
+            set_of_skills.update(skills_split)
         skills_random = sample(set_of_skills, 5)
         main = {
             'specialties': specialties,
