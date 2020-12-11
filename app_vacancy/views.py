@@ -10,9 +10,13 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from app_vacancy.forms import RegisterUserForm, ApplicationForm, MyCompanyForm, MyCompanyVacanciesCreateEditForm, \
-    MyResumeForm
-from app_vacancy.models import Company, Specialty, Vacancy, Application
+from app_vacancy.forms import ApplicationForm
+from app_vacancy.forms import MyCompanyForm
+from app_vacancy.forms import MyCompanyVacanciesCreateEditForm
+from app_vacancy.forms import MyResumeForm
+from app_vacancy.forms import RegisterUserForm
+
+from app_vacancy.models import Application, Company, Specialty, Vacancy
 
 
 class MainView(View):
@@ -326,7 +330,7 @@ class MyCompanyOneVacancy(View):
             if alien_company != vacancy.company_id:
                 return redirect('/mycompany/vacancies')
             form = MyCompanyVacanciesCreateEditForm(instance=vacancy)
-            applications = Application.objects.filter(vacancy_id=id)\
+            applications = Application.objects.filter(vacancy_id=id) \
                 .values(
                 'written_username',
                 'written_phone',
@@ -354,7 +358,7 @@ class MyCompanyOneVacancy(View):
 
         vacancy = Vacancy.objects.get(id=id)
         form = MyCompanyVacanciesCreateEditForm(instance=vacancy)
-        applications = Application.objects.filter(vacancy_id=id)\
+        applications = Application.objects.filter(vacancy_id=id) \
             .values(
             'written_username',
             'written_phone',
