@@ -123,7 +123,10 @@ class OneVacancyView(View):
             application.save()
             return redirect(f"/vacancies/{id}/sent")
 
-        vac_and_form = {'vac': vac, 'form': form}
+        vac_and_form = {
+            'vac': vac,
+            'form': form
+        }
         return render(request, 'vacancy.html', context=vac_and_form)
 
 
