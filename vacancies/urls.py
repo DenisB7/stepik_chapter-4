@@ -19,10 +19,15 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from app_vacancy.views import custom_handler404, custom_handler500, MainView, SearchView, ResumeEditView, \
-    ResumeStartView, ResumeCreateView, AllVacanciesView, VacanciesSpecView, CompaniesView, OneVacancyView, \
-    SendRequestView, MyCompany, MyCompanyStart, MyCompanyStartCreate, MyCompanyVacancies, MyCompanyVacanciesStart, \
-    MyCompanyVacancyCreate, MyCompanyOneVacancy, MyLoginView, RegisterUserView
+from app_vacancy.views import AllVacanciesView, CompaniesView, MainView, OneVacancyView, SearchView, VacanciesSpecView, \
+    SendRequestView
+from app_vacancy.views import MyCompany, MyCompanyStart, MyCompanyStartCreate
+from app_vacancy.views import MyCompanyVacancies, MyCompanyVacanciesStart, MyCompanyVacancyCreate, MyCompanyOneVacancy
+from app_vacancy.views import MyLoginView, RegisterUserView
+from app_vacancy.views import ResumeEditView, ResumeStartView, ResumeCreateView
+
+from app_vacancy.views import custom_handler404
+from app_vacancy.views import custom_handler500
 
 handler404 = custom_handler404
 handler500 = custom_handler500
