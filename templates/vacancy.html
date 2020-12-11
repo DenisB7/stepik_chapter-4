@@ -5,12 +5,12 @@
     <div class="row mt-5">
       <div class="col-12 col-lg-2">
         <div class="pl-3 mb-5">
-          <p><a href="/">Назад</a></p>
+          <p><a href="/vacancies">Назад</a></p>
         </div>
       </div>
       <div class="col-12 col-lg-8">
         <section class="pl-3">
-          <a href="#"><img src="{{ vac.company.logo.url }}" width="130" height="80" alt=""></a>
+          <a href="/companies/{{ vac.company.id }}/"><img src="{{ vac.company.logo.url }}" width="130" height="80" alt=""></a>
           <div class="d-flex align-items-baseline align-content-baseline">
             <h1 class="h2 mt-4 font-weight-bold" >{{ vac.title }}</h1>
             <p class="m-0 pl-3">{{ vac.salary_min }} – {{ vac.salary_max }} Р</p>
