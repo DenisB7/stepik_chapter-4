@@ -178,7 +178,6 @@ class ResumeEditView(View):
         form = MyResumeForm(request.POST, instance=owner.resumes)
         if form.is_valid():
             my_resume = form.save(commit=False)
-            my_resume.id = owner.resumes.id
             my_resume.user = owner
             my_resume.save()
             messages.success(request, 'Ваше резюме обновлено!')
@@ -224,7 +223,6 @@ class MyCompany(View):
         form = MyCompanyForm(request.POST, request.FILES, instance=owner.company)
         if form.is_valid():
             my_company = form.save(commit=False)
-            my_company.id = owner.company.id
             my_company.owner = owner
             my_company.save()
             messages.success(request, 'Информация о компании обновлена!')
@@ -350,7 +348,6 @@ class MyCompanyOneVacancy(View):
         form = MyCompanyVacanciesCreateEditForm(request.POST, instance=vacancy)
         if form.is_valid():
             my_comp_vac = form.save(commit=False)
-            my_comp_vac.id = id
             my_comp_vac.company_id = company_id
             my_comp_vac.save()
             messages.success(request, 'Поздравляем! Вы обновили информацию о вакансии')
