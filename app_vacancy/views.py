@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -89,7 +90,7 @@ class CompaniesView(View):
                 'vacs_of_company': vacs_of_company
             }
             return render(request, 'company.html', context=companies)
-        except:
+        except ObjectDoesNotExist:
             raise Http404
 
 
@@ -99,7 +100,7 @@ class SendRequestView(View):
         try:
             vacancy_id = {'vacancy_id': id}
             return render(request, 'sent.html', context=vacancy_id)
-        except:
+        except ObjectDoesNotExist:
             raise Http404
 
 
@@ -114,7 +115,7 @@ class OneVacancyView(View):
                 'form': form
             }
             return render(request, 'vacancy.html', context=vac_and_form)
-        except:
+        except ObjectDoesNotExist:
             raise Http404
 
     def post(self, request, id):
@@ -148,7 +149,7 @@ class ResumeCreateView(View):
         try:
             have_got_resume = request.user.resumes
             return redirect('/myresume')
-        except:
+        except ObjectDoesNotExist:
             form = MyResumeForm()
             return render(request, 'resume-create.html', {'form': form})
 
@@ -174,7 +175,7 @@ class ResumeEditView(View):
             my_resume = request.user.resumes
             form = MyResumeForm(instance=my_resume)
             return render(request, 'resume-edit.html', {'form': form})
-        except:
+        except ObjectDoesNotExist:
             return redirect('/myresume/start')
 
     def post(self, request):
@@ -219,7 +220,7 @@ class MyCompany(View):
             my_company = request.user.company
             form = MyCompanyForm(instance=my_company)
             return render(request, 'company-edit.html', {'form': form})
-        except:
+        except ObjectDoesNotExist:
             return redirect('/mycompany/start')
 
     def post(self, request):
@@ -250,7 +251,7 @@ class MyCompanyStartCreate(View):
         try:
             have_got_company = request.user.company
             return redirect('/mycompany')
-        except:
+        except ObjectDoesNotExist:
             form = MyCompanyForm()
             return render(request, 'company-create.html', {'form': form})
 
@@ -285,8 +286,8 @@ class MyCompanyVacancies(View):
                 'applications': Application.objects.filter(vacancy_id=vacancy.id).count()
             }
             vacancies_list.append(vacancy_dict)
-        context = {'vacancies_list': vacancies_list}
-        return render(request, 'vacancy-list.html', context=context)
+        mycomp_vacs = {'vacancies_list': vacancies_list}
+        return render(request, 'vacancy-list.html', context=mycomp_vacs)
 
 
 class MyCompanyVacanciesStart(View):
@@ -343,7 +344,7 @@ class MyCompanyOneVacancy(View):
                 'applications': applications
             }
             return render(request, 'vacancy-edit.html', context=context)
-        except:
+        except ObjectDoesNotExist:
             raise Http404
 
     def post(self, request, id):
@@ -363,13 +364,13 @@ class MyCompanyOneVacancy(View):
             'written_phone',
             'written_cover_letter'
         )
-        context = {
+        one_vacancy = {
             'form': form,
             'vacancy_title': vacancy.title,
             'applications': applications
         }
-        messages.error(request, 'ОШИБКА! Вакансия не обновлена!')
-        return render(request, 'vacancy-edit.html', context=context)
+        messages.error(request, 'ОШИБКА! Информация о вакансии не обновлена!')
+        return render(request, 'vacancy-edit.html', context=one_vacancy)
 
 
 def custom_handler404(request, exception):
