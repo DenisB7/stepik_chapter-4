@@ -6,7 +6,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 
@@ -67,10 +67,14 @@ class AllVacanciesView(View):
 class VacanciesSpecView(View):
 
     def get(self, request, specialty):
-        vacs_of_spec = Specialty.objects.filter(code=specialty)
-        if not vacs_of_spec:
-            raise Http404
-        vacancies_of_spec = {'vacs_of_spec': vacs_of_spec}
+        spec = get_object_or_404(Specialty, code=specialty)
+        vacs_of_spec = Vacancy.objects.filter(specialty__code=spec.code)
+        vacs_of_spec_amount = vacs_of_spec.count()
+        vacancies_of_spec = {
+            'spec': spec,
+            'vacs_of_spec': vacs_of_spec,
+            'vacs_of_spec_amount': vacs_of_spec_amount
+        }
         return render(request, 'vacsspec.html', context=vacancies_of_spec)
 
 
