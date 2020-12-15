@@ -175,7 +175,7 @@ class ResumeEditView(View):
 
     def post(self, request):
         owner = request.user
-        form = MyResumeForm(request.POST)
+        form = MyResumeForm(request.POST, instance=owner.resumes)
         if form.is_valid():
             my_resume = form.save(commit=False)
             my_resume.id = owner.resumes.id
@@ -184,8 +184,6 @@ class ResumeEditView(View):
             messages.success(request, 'Ваше резюме обновлено!')
             return redirect(request.path)
 
-        my_resume = owner.resumes
-        form = MyResumeForm(instance=my_resume)
         messages.error(request, 'ОШИБКА! Ваше резюме не обновлено!')
         return render(request, 'resume-edit.html', {'form': form})
 
@@ -223,7 +221,7 @@ class MyCompany(View):
 
     def post(self, request):
         owner = request.user
-        form = MyCompanyForm(request.POST, request.FILES)
+        form = MyCompanyForm(request.POST, request.FILES, instance=owner.company)
         if form.is_valid():
             my_company = form.save(commit=False)
             my_company.id = owner.company.id
@@ -232,8 +230,6 @@ class MyCompany(View):
             messages.success(request, 'Информация о компании обновлена!')
             return redirect(request.path)
 
-        my_company = owner.company
-        form = MyCompanyForm(instance=my_company)
         messages.error(request, 'ОШИБКА! Информация о компании не обновлена!')
         return render(request, 'company-edit.html', {'form': form})
 
@@ -350,7 +346,8 @@ class MyCompanyOneVacancy(View):
 
     def post(self, request, id):
         company_id = request.user.company.id
-        form = MyCompanyVacanciesCreateEditForm(request.POST)
+        vacancy = Vacancy.objects.get(id=id)
+        form = MyCompanyVacanciesCreateEditForm(request.POST, instance=vacancy)
         if form.is_valid():
             my_comp_vac = form.save(commit=False)
             my_comp_vac.id = id
@@ -359,20 +356,18 @@ class MyCompanyOneVacancy(View):
             messages.success(request, 'Поздравляем! Вы обновили информацию о вакансии')
             return redirect(request.path)
 
-        vacancy = Vacancy.objects.get(id=id)
-        form = MyCompanyVacanciesCreateEditForm(instance=vacancy)
         applications = Application.objects.filter(vacancy_id=id) \
             .values(
             'written_username',
             'written_phone',
             'written_cover_letter'
         )
-        messages.error(request, 'ОШИБКА! Вакансия не обновлена!')
         context = {
             'form': form,
             'vacancy_title': vacancy.title,
             'applications': applications
         }
+        messages.error(request, 'ОШИБКА! Вакансия не обновлена!')
         return render(request, 'vacancy-edit.html', context=context)
 
 
