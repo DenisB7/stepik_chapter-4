@@ -3,10 +3,10 @@
 {% block content %}
 
     <section>
-      <h1 class="h1 text-center mx-auto mt-4 pt-5" style="font-size: 70px;"><strong>{{ vacs_of_spec.first.title }}</strong></h1>
-      <p class="text-center pt-1">{{ vacs_of_spec.first.vacancies.all.count }} вакансий</p>
+      <h1 class="h1 text-center mx-auto mt-4 pt-5" style="font-size: 70px;"><strong>{{ spec.title }}</strong></h1>
+      <p class="text-center pt-1">{{ vacs_of_spec_amount }} вакансий</p>
       <div class="row mt-5">
-        {% for vac_of_spec in vacs_of_spec.first.vacancies.all %}
+        {% for vac_of_spec in vacs_of_spec %}
         <div class="col-12 col-lg-8 offset-lg-2 m-auto">
           <div class="card mb-4">
             <div class="card-body px-4">
@@ -18,7 +18,7 @@
                   <p class="text-muted pt-1">{{ vac_of_spec.published_at }}</p>
                 </div>
                 <div class="col-12 col-md-4 col-lg-3 d-flex align-items-end">
-                  <a href="#"><img src="{{ vac_of_spec.specialty.picture.url }}" width="130" height="80" alt=""></a>
+                  <a href="/vacancies/{{ vac_of_spec.id }}/"><img src="{{ vac_of_spec.specialty.picture.url }}" width="130" height="80" alt=""></a>
                 </div>
               </div>
             </div>
