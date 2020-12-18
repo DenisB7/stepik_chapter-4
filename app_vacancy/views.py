@@ -143,9 +143,11 @@ class ResumeStartView(View):
 
     @method_decorator(login_required)
     def get(self, request):
-        if request.user.resumes:
-            return redirect('/myresume')
-        return render(request, 'resume-start.html')
+        try:
+            if request.user.resumes:
+                return redirect('/myresume')
+        except ObjectDoesNotExist:
+            return render(request, 'resume-start.html')
 
 
 class ResumeCreateView(View):
@@ -247,9 +249,11 @@ class MyCompanyStart(View):
 
     @method_decorator(login_required)
     def get(self, request):
-        if request.user.company:
-            return redirect('/mycompany')
-        return render(request, 'company-start.html')
+        try:
+            if request.user.company:
+                return redirect('/mycompany')
+        except ObjectDoesNotExist:
+            return render(request, 'company-start.html')
 
 
 class MyCompanyStartCreate(View):
@@ -303,6 +307,8 @@ class MyCompanyVacanciesStart(View):
 
     @method_decorator(login_required)
     def get(self, request):
+        if request.user.company.vacancies.all():
+            return redirect('/mycompany/vacancies')
         return render(request, 'vacancy-start.html')
 
 
