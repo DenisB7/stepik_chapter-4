@@ -151,8 +151,8 @@ class ResumeCreateView(View):
     @method_decorator(login_required)
     def get(self, request):
         try:
-            have_got_resume = request.user.resumes
-            return redirect('/myresume')
+            if request.user.resumes:
+                return redirect('/myresume')
         except ObjectDoesNotExist:
             form = MyResumeForm()
             return render(request, 'resume-create.html', {'form': form})
@@ -253,8 +253,8 @@ class MyCompanyStartCreate(View):
     @method_decorator(login_required)
     def get(self, request):
         try:
-            have_got_company = request.user.company
-            return redirect('/mycompany')
+            if request.user.company:
+                return redirect('/mycompany')
         except ObjectDoesNotExist:
             form = MyCompanyForm()
             return render(request, 'company-create.html', {'form': form})
@@ -277,17 +277,18 @@ class MyCompanyVacancies(View):
 
     @method_decorator(login_required)
     def get(self, request):
-        vacancies = Vacancy.objects.filter(company__owner=request.user)
+        owner = request.user
+        vacancies = Vacancy.objects.values('id', 'title', 'salary_min', 'salary_max').filter(company__owner=owner)
         if not vacancies:
             return redirect('/mycompany/vacancies/start')
         vacancies_list = []
         for vacancy in vacancies:
             vacancy_dict = {
-                'id': vacancy.id,
-                'title': vacancy.title,
-                'salary_min': vacancy.salary_min,
-                'salary_max': vacancy.salary_max,
-                'applications': Application.objects.filter(vacancy_id=vacancy.id).count()
+                'id': vacancy['id'],
+                'title': vacancy['title'],
+                'salary_min': vacancy['salary_min'],
+                'salary_max': vacancy['salary_max'],
+                'applications': Application.objects.filter(vacancy_id=vacancy['id']).count()
             }
             vacancies_list.append(vacancy_dict)
         mycomp_vacs = {'vacancies_list': vacancies_list}
@@ -336,11 +337,10 @@ class MyCompanyOneVacancy(View):
             if alien_company != vacancy.company_id:
                 return redirect('/mycompany/vacancies')
             form = MyCompanyVacanciesCreateEditForm(instance=vacancy)
-            applications = Application.objects.filter(vacancy_id=id) \
-                .values(
-                'written_username',
-                'written_phone',
-                'written_cover_letter'
+            applications = (
+                vacancy.applications
+                .values('written_username', 'written_phone', 'written_cover_letter')
+                .filter(vacancy_id=id)
             )
             context = {
                 'form': form,
@@ -362,11 +362,10 @@ class MyCompanyOneVacancy(View):
             messages.success(request, 'Поздравляем! Вы обновили информацию о вакансии')
             return redirect(request.path)
 
-        applications = Application.objects.filter(vacancy_id=id) \
-            .values(
-            'written_username',
-            'written_phone',
-            'written_cover_letter'
+        applications = (
+            vacancy.applications
+            .values('written_username', 'written_phone', 'written_cover_letter')
+            .filter(vacancy_id=id)
         )
         one_vacancy = {
             'form': form,
