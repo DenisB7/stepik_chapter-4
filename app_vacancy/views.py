@@ -109,7 +109,7 @@ class OneVacancyView(View):
     def get(self, request, id):
         try:
             vacancy = Vacancy.objects.get(id=id)
-            company = Company.objects.get(id=vacancy.company_id)
+            company = vacancy.company
             form = ApplicationForm()
             vac_and_form = {
                 'vacancy': vacancy,
@@ -130,7 +130,7 @@ class OneVacancyView(View):
             application.save()
             return redirect(f"/vacancies/{id}/sent")
 
-        company = Company.objects.get(id=vacancy.company_id)
+        company = vacancy.company
         vac_and_form = {
             'vacancy': vacancy,
             'company': company,
