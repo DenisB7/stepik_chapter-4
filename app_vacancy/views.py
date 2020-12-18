@@ -121,17 +121,19 @@ class OneVacancyView(View):
             raise Http404
 
     def post(self, request, id):
-        vac = Vacancy.objects.get(id=id)
+        vacancy = Vacancy.objects.get(id=id)
         form = ApplicationForm(request.POST)
         if form.is_valid():
             application = form.save(commit=False)
             application.vacancy_id = id
-            application.user_id = vac.company.owner_id
+            application.user_id = vacancy.company.owner_id
             application.save()
             return redirect(f"/vacancies/{id}/sent")
 
+        company = Company.objects.get(id=vacancy.company_id)
         vac_and_form = {
-            'vac': vac,
+            'vacancy': vacancy,
+            'company': company,
             'form': form
         }
         return render(request, 'vacancy.html', context=vac_and_form)
