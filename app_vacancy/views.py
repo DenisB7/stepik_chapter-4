@@ -143,6 +143,8 @@ class ResumeStartView(View):
 
     @method_decorator(login_required)
     def get(self, request):
+        if request.user.resumes:
+            return redirect('/myresume')
         return render(request, 'resume-start.html')
 
 
@@ -245,6 +247,8 @@ class MyCompanyStart(View):
 
     @method_decorator(login_required)
     def get(self, request):
+        if request.user.company:
+            return redirect('/mycompany')
         return render(request, 'company-start.html')
 
 
@@ -306,12 +310,8 @@ class MyCompanyVacancyCreate(View):
 
     @method_decorator(login_required)
     def get(self, request):
-        have_got_vacancy = Vacancy.objects.filter(company__owner_id=request.user.id)
-        if have_got_vacancy:
-            return redirect('/mycompany/vacancies')
-        else:
-            form = MyCompanyVacanciesCreateEditForm()
-            return render(request, 'vacancy-create.html', {'form': form})
+        form = MyCompanyVacanciesCreateEditForm()
+        return render(request, 'vacancy-create.html', {'form': form})
 
     def post(self, request):
         owner = request.user
