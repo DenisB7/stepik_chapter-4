@@ -19,8 +19,9 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from app_vacancy.views import AllVacanciesView, CompaniesView, MainView, OneVacancyView, SearchView, VacanciesSpecView, \
-    SendRequestView
+from app_vacancy.views import AllVacanciesView, CompaniesView, MainView, OneVacancyView, SearchView, VacanciesSpecView
+from app_vacancy.views import SendRequestView
+
 from app_vacancy.views import MyCompany, MyCompanyStart, MyCompanyStartCreate
 from app_vacancy.views import MyCompanyVacancies, MyCompanyVacanciesStart, MyCompanyVacancyCreate, MyCompanyOneVacancy
 from app_vacancy.views import MyLoginView, RegisterUserView
