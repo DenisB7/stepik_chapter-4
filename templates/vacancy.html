@@ -10,18 +10,18 @@
       </div>
       <div class="col-12 col-lg-8">
         <section class="pl-3">
-          <a href="/companies/{{ vac.company.id }}/"><img src="{{ vac.company.logo.url }}" width="130" height="80" alt=""></a>
+          <a href="/companies/{{ company.id }}/"><img src="{{ company.logo.url }}" width="130" height="80" alt=""></a>
           <div class="d-flex align-items-baseline align-content-baseline">
-            <h1 class="h2 mt-4 font-weight-bold" >{{ vac.title }}</h1>
-            <p class="m-0 pl-3">{{ vac.salary_min }} – {{ vac.salary_max }} Р</p>
+            <h1 class="h2 mt-4 font-weight-bold" >{{ vacancy.title }}</h1>
+            <p class="m-0 pl-3">{{ vacancy.salary_min }} – {{ vacancy.salary_max }} Р</p>
           </div>
-          <p class="mt-2">{{ vac.specialty.title }} • {{ vac.skills }}</p>
-          <p class="text-muted mb-4">{{ vac.company.name }} ({{ vac.company.employee_count }} человек), {{ vac.company.location }} или удаленно</p>
+          <p class="mt-2">{{ vacancy.specialty.title }} • {{ vacancy.skills }}</p>
+          <p class="text-muted mb-4">{{ company.name }} ({{ company.employee_count }} человек), {{ company.location }} или удаленно</p>
           <div style="line-height: 1.8;">
-            <p>{{ vac.company.description }}</p>
-            {{ vac.description|safe }}
+            <p>{{ company.description }}</p>
+            {{ vacancy.description|safe }}
           </div>
-          <form method="POST" action="/vacancies/{{ vac.id }}/" class="card mt-4 mb-3" enctype="multipart/form-data">
+          <form method="POST" action="/vacancies/{{ vacancy.id }}/" class="card mt-4 mb-3" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="card-body mx-3">
               <p class="h5 mt-3 font-weight-bold">Отозваться на вакансию</p>
