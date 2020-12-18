@@ -109,10 +109,12 @@ class OneVacancyView(View):
     def get(self, request, id):
         try:
             vacancy = Vacancy.objects.get(id=id)
+            company = Company.objects.get(id=vacancy.company_id)
             form = ApplicationForm()
             vac_and_form = {
-                'vac': vacancy,
-                'form': form
+                'vacancy': vacancy,
+                'company': company,
+                'form': form,
             }
             return render(request, 'vacancy.html', context=vac_and_form)
         except ObjectDoesNotExist:
