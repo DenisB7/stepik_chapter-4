@@ -69,7 +69,7 @@ class VacanciesSpecView(View):
 
     def get(self, request, specialty):
         spec = get_object_or_404(Specialty, code=specialty)
-        vacs_of_spec = Vacancy.objects.filter(specialty__code=spec.code)
+        vacs_of_spec = spec.vacancies.all()
         vacs_of_spec_amount = vacs_of_spec.count()
         vacancies_of_spec = {
             'spec': spec,
