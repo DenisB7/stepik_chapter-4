@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -25,11 +25,16 @@ class MainView(View):
     def get(self, request):
         query = request.GET.get('search')
         if query:
-            specialties = Specialty.objects.filter(title__icontains=query)
-            companies = Company.objects.filter(name__icontains=query)
+            specialties = Specialty.objects.filter(title__icontains=query).annotate(vacancies_number=Count('vacancies'))
+            companies = (
+                Company.objects
+                .values('id', 'name', 'logo')
+                .annotate(vacancies_number=Count('vacancies'))
+                .filter(name__icontains=query)
+            )
         else:
-            specialties = Specialty.objects.all()
-            companies = Company.objects.all()
+            specialties = Specialty.objects.all().annotate(vacancies_number=Count('vacancies'))
+            companies = Company.objects.values('id', 'name', 'logo').annotate(vacancies_number=Count('vacancies'))
         skills = Vacancy.objects.values('skills')
         set_of_skills = set()
         for skills_list in skills:
