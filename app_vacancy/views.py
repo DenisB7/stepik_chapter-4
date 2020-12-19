@@ -291,20 +291,15 @@ class MyCompanyVacancies(View):
     @method_decorator(login_required)
     def get(self, request):
         owner = request.user
-        vacancies = Vacancy.objects.values('id', 'title', 'salary_min', 'salary_max').filter(company__owner=owner)
+        vacancies = (
+            Vacancy.objects
+            .values('id', 'title', 'salary_min', 'salary_max')
+            .filter(company__owner=owner)
+            .annotate(applications_number=Count('applications'))
+        )
         if not vacancies:
             return redirect('/mycompany/vacancies/start')
-        vacancies_list = []
-        for vacancy in vacancies:
-            vacancy_dict = {
-                'id': vacancy['id'],
-                'title': vacancy['title'],
-                'salary_min': vacancy['salary_min'],
-                'salary_max': vacancy['salary_max'],
-                'applications': Application.objects.filter(vacancy_id=vacancy['id']).count()
-            }
-            vacancies_list.append(vacancy_dict)
-        mycomp_vacs = {'vacancies_list': vacancies_list}
+        mycomp_vacs = {'vacancies': vacancies}
         return render(request, 'vacancy-list.html', context=mycomp_vacs)
 
 
