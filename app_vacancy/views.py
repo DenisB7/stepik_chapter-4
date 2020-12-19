@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponseNotFound, HttpResponseServerError, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -29,7 +29,7 @@ class MainView(View):
             companies = Company.objects.filter(name__icontains=query)
         else:
             specialties = Specialty.objects.all()
-            companies = Company.objects.all()
+            companies = Company.objects.values('id', 'name', 'logo').annotate(vacancies_number=Count('vacancies'))
         skills = Vacancy.objects.values('skills')
         set_of_skills = set()
         for skills_list in skills:
