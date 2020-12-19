@@ -25,10 +25,15 @@ class MainView(View):
     def get(self, request):
         query = request.GET.get('search')
         if query:
-            specialties = Specialty.objects.filter(title__icontains=query)
-            companies = Company.objects.filter(name__icontains=query)
+            specialties = Specialty.objects.filter(title__icontains=query).annotate(vacancies_number=Count('vacancies'))
+            companies = (
+                Company.objects
+                .values('id', 'name', 'logo')
+                .annotate(vacancies_number=Count('vacancies'))
+                .filter(name__icontains=query)
+            )
         else:
-            specialties = Specialty.objects.all()
+            specialties = Specialty.objects.all().annotate(vacancies_number=Count('vacancies'))
             companies = Company.objects.values('id', 'name', 'logo').annotate(vacancies_number=Count('vacancies'))
         skills = Vacancy.objects.values('skills')
         set_of_skills = set()
