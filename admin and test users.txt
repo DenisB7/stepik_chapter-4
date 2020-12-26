@@ -102,7 +102,7 @@ user12
 leonid4@example.ru
 dostal5_100_!
 
-13 для финального теста
+13
 
 user13
 Тест
